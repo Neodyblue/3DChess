@@ -63,10 +63,11 @@ namespace _3DChess
                     break;
 
                 case Type.King:
-                    for (int i = 0; i < 3; i++)
-                        for (int j = 0; j < 3; j++)
-                            for (int k = 0; k < 3; k++)
-                                possibleMoves.Add(new Vector3(Position.X + (j - 1), Position.Y + (k - 1), i));
+                    for (int i = -1; i < 2; i++)
+                        for (int j = -1; j < 2; j++)
+                            for (int k = -1; k < 2; k++)
+                                if (Board.IsInBound(new Vector3(Position.X + i, Position.Y + j, Position.Z + k)) && Board.board[(int)Position.X + i, (int)Position.Y + j, (int)Position.Z + k].PieceType == Type.Empty)
+                                    possibleMoves.Add(new Vector3(Position.X + i, Position.Y + j, Position.Z + k));
                     break;
 
                 case Type.Root:

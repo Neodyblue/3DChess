@@ -28,72 +28,37 @@ namespace _3DChess
                 case Type.Pawn:
 
                     #region Pawn
-                    for (int i = 0; i < 3; i++)
+                    if (IsWhite)
                     {
-                        if (i == Position.Z)
-                        {
-                            //TODO: promotion
-                            possibleMoves.Add(IsWhite
-                                                  ? new Vector3(Position.X, Position.Y + 1, i)
-                                                  : new Vector3(Position.X, Position.Y - 1, i));
-                            continue;
-                        }
-
-                        possibleMoves.Add(new Vector3(Position.X, Position.Y, i));
-
-                        var enemyLeft = new Vector3(Position.X - 1, IsWhite ? Position.Y + 1 : Position.Y - 1,
-                                                    Position.Z);
-                        var enemyRight = new Vector3(Position.X + 1, IsWhite ? Position.Y + 1 : Position.Y - 1,
-                                                     Position.Z);
-
-                        if (Board.IsInBound(enemyLeft) &&
-                            Board.board[(int) enemyLeft.X, (int) enemyLeft.Y, (int) enemyLeft.Z].IsWhite == !IsWhite)
-                            possibleMoves.Add(enemyLeft);
-
-                        if (Board.IsInBound(enemyRight) &&
-                            Board.board[(int) enemyRight.X, (int) enemyRight.Y, (int) enemyRight.Z].IsWhite == !IsWhite)
-                            possibleMoves.Add(enemyRight);
+                        if (Position.Z < 2 && Board.board[(int)Position.X, (int)Position.Y, (int)Position.Z + 1].PieceType == Type.Empty)
+                            possibleMoves.Add(new Vector3(Position.X, Position.Y, Position.Z + 1));
+                        if (Position.Y < 7 && Board.board[(int)Position.X, (int)Position.Y + 1, (int)Position.Z].PieceType == Type.Empty)
+                            possibleMoves.Add(new Vector3(Position.X, Position.Y + 1, Position.Z));
+                    }
+                    else // !IsWhite
+                    {
+                        if (Position.Z > 0 && Board.board[(int)Position.X, (int)Position.Y, (int)Position.Z - 1].PieceType == Type.Empty)
+                            possibleMoves.Add(new Vector3(Position.X, Position.Y, Position.Z - 1));
+                        if (Position.Y > 0 && Board.board[(int)Position.X, (int)Position.Y - 1, (int)Position.Z].PieceType == Type.Empty)
+                            possibleMoves.Add(new Vector3(Position.X, Position.Y - 1, Position.Z));
                     }
                     #endregion
                     break;
 
                 case Type.Bishop:
                     #region Bishop
-                    for (int i = 0; i < 3; i++)
-                    {
-                        if (i == Position.Z)
-                        {
-                            for (int j = 1; j < 8; j++)
-                            {
-                                possibleMoves.Add(new Vector3(Position.X + j, Position.Y + j, Position.Z));
-                                if (Board.board[(int) (Position.X + j), (int) (Position.Y + j), i].IsWhite == !IsWhite) break;
-                            }
-
-                            for (int j = 1; j < 8; j++)
-                            {
-                                possibleMoves.Add(new Vector3(Position.X - j, Position.Y - j, Position.Z));
-                                if (Board.board[(int)(Position.X + j), (int)(Position.Y + j), i].IsWhite == !IsWhite) break;
-                            }
-
-                            for (int j = 1; j < 8; j++)
-                            {
-                                possibleMoves.Add(new Vector3(Position.X - j, Position.Y + j, Position.Z));
-                                if (Board.board[(int)(Position.X + j), (int)(Position.Y + j), i].IsWhite == !IsWhite) break;
-                            }
-
-                            for (int j = 1; j < 8; j++)
-                            {
-                                possibleMoves.Add(new Vector3(Position.X + j, Position.Y - j, Position.Z));
-                                if (Board.board[(int)(Position.X + j), (int)(Position.Y + j), i].IsWhite == !IsWhite) break;
-                            }
-                            continue;
-                        }
-
-                        possibleMoves.Add(new Vector3(Position.X + Math.Abs(i - Position.Z), Position.Y, i));
-                        possibleMoves.Add(new Vector3(Position.X - Math.Abs(i - Position.Z), Position.Y, i));
-                        possibleMoves.Add(new Vector3(Position.X, Position.Y - Math.Abs(i - Position.Z), i));
-                        possibleMoves.Add(new Vector3(Position.X, Position.Y + Math.Abs(i - Position.Z), i));
-                    }
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 1, 1, 0));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 1, -1, 0));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, -1, 1, 0));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, -1, -1, 0));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, 1, 1));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, 1, -1));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, -1, 1));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, -1, -1));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 1, 0, 1));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 1, 0, -1));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, -1, 0, 1));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, -1, 0, -1));
                     #endregion
                     break;
 
@@ -122,6 +87,17 @@ namespace _3DChess
             }
 
             return possibleMoves.Where(current => Board.IsInBound(current) && current != Position);
+        }
+
+        public List<Vector3> GetPossibleCasesFromStartingPointAndDirection(Vector3 v, int dx, int dy, int dz)
+        {
+            List<Vector3> l = new List<Vector3>();
+            if (v.X + dx >= 0 && v.X + dx < 8 && v.Y + dy >= 0 && v.Y + dy < 8 && v.Z + dz >= 0 && v.Z + dz < 3 && Board.board[(int)v.X + dx, (int)v.Y + dy, (int)v.Z + dz].PieceType == Type.Empty)
+            {
+                l = GetPossibleCasesFromStartingPointAndDirection(new Vector3(v.X + dx, v.Y + dy, v.Z + dz), dx, dy, dz);
+                l.Add(new Vector3(v.X + dx, v.Y + dy, v.Z + dz));
+            }
+            return l;
         }
     }
 }

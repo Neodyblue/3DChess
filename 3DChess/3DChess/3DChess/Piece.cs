@@ -91,7 +91,7 @@ namespace _3DChess
 
                 case Type.King:
                     #region King
-                    for (int i = 0; i < 3; i++)
+                    for (int i = (int) (Position.Z - 1); i <= Position.Z + 1; i++)
                     {
                         possibleMoves.Add(new Vector3(Position.X, Position.Y - 1, i));
                         possibleMoves.Add(new Vector3(Position.X, Position.Y, i));
@@ -105,6 +105,12 @@ namespace _3DChess
                         possibleMoves.Add(new Vector3(Position.X - 1, Position.Y, i));
                         possibleMoves.Add(new Vector3(Position.X - 1, Position.Y + 1, i));
                     }
+                    #endregion
+                    break;
+
+                case Type.Root:
+                    #region root
+
                     #endregion
                     break;
             }

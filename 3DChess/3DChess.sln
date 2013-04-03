@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DChess", "3DChess\3DChess\3DChess.csproj", "{A64D8AA9-D886-4CCC-B6DE-C97A8A776AEB}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "3DChessContent", "3DChess\3DChessContent\3DChessContent.contentproj", "{1A281C9C-98A9-4354-9734-4C13EFB93E12}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A64D8AA9-D886-4CCC-B6DE-C97A8A776AEB}.Debug|x86.ActiveCfg = Debug|x86
+		{A64D8AA9-D886-4CCC-B6DE-C97A8A776AEB}.Debug|x86.Build.0 = Debug|x86
+		{A64D8AA9-D886-4CCC-B6DE-C97A8A776AEB}.Release|x86.ActiveCfg = Release|x86
+		{A64D8AA9-D886-4CCC-B6DE-C97A8A776AEB}.Release|x86.Build.0 = Release|x86
+		{1A281C9C-98A9-4354-9734-4C13EFB93E12}.Debug|x86.ActiveCfg = Debug|x86
+		{1A281C9C-98A9-4354-9734-4C13EFB93E12}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

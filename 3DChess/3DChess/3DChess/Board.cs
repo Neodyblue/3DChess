@@ -93,6 +93,14 @@ namespace _3DChess
                 );
         }
 
+        public static bool IsInBound(Vector3 vector)
+        {
+            if (vector.X > 7 || vector.X < 0 || vector.Y > 7 || vector.Y < 0 || vector.Z > 2 || vector.Z < 0)
+                return false;
+            else
+                return true;
+        }
+
         public static Vector2 BoardToScreen(int x, int y, int z)
         {
             return new Vector2(z * 10 * whiteTile.Width + x * whiteTile.Width - 14 * whiteTile.Width + game.Window.ClientBounds.Width / 2, y * whiteTile.Height - 4 * whiteTile.Height + game.Window.ClientBounds.Height / 2);

@@ -24,7 +24,7 @@ namespace _3DChess
 
             switch (PieceType)
             {
-                    case Type.Pawn:
+                case Type.Pawn:
                 case Type.Bishop:
                     for (int i = 0; i < 3 && i != Position.Z; i++)
                     {
@@ -35,10 +35,13 @@ namespace _3DChess
                     }
                     for (int i = 1; i <= 8; i++)
                     {
-                        
+
                     }
-                        break;
+                    break;
+                case Type.King:
+                    break;
             }
+            return possibleMoves.Where(vector => Board.IsInBound(vector));
         }
     }
 }

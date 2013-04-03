@@ -12,20 +12,24 @@ using Microsoft.Xna.Framework.Media;
 namespace _3DChess
 {
     enum Type
-    {
-        King,
-        Queen,
-        Bishop,
-        Knight,
-        Root,
-        Pawn
-    }
-
+        {
+            King,
+            Queen,
+            Bishop,
+            Knight,
+            Root,
+            Pawn
+        }
+    
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+
+        bool MenuRunning = true;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        int screenWidth, screenHeight;
 
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -38,6 +42,9 @@ namespace _3DChess
             this.IsMouseVisible = true;
             this.graphics.IsFullScreen = true;
             this.graphics.ApplyChanges();
+            screenWidth = this.Window.ClientBounds.Width;
+            screenHeight = this.Window.ClientBounds.Height;
+            this.graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -45,7 +52,7 @@ namespace _3DChess
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            Menu.LoadContent(Content, screenWidth, screenHeight);
             Board.LoadContent(Content);
         }
 
@@ -56,10 +63,11 @@ namespace _3DChess
 
         protected override void Update(GameTime gameTime)
         {
+
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
+            Menu.Update(gameTime, ref MenuRunning);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -67,10 +75,18 @@ namespace _3DChess
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Green);
+            
 
             spriteBatch.Begin();
-            Board.Draw(gameTime, spriteBatch);
+            if (MenuRunning)
+            {
+                Menu.Draw(gameTime, spriteBatch,screenWidth, screenHeight);
+            }
+            else
+            { 
+                GraphicsDevice.Clear(Color.Green);
+                Board.Draw(gameTime, spriteBatch);
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);

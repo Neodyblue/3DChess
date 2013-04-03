@@ -33,11 +33,10 @@ namespace _3DChess
             if (PlayButton.isClicked) //si on press le btn play
             {
                 menuRunning = false;
+                PlayButton.isClicked = false;
             }
             else if (QuitButton.isClicked)
-            {
                 Environment.Exit(0);
-            }
             QuitButton.Update(mouse, gameTime);
             PlayButton.Update(mouse, gameTime);
         }

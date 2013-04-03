@@ -82,7 +82,10 @@ namespace _3DChess
 
             Board.Update();
             // TODO: Add your update logic here
-
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                MenuRunning = true;
+            }
             base.Update(gameTime);
         }
 

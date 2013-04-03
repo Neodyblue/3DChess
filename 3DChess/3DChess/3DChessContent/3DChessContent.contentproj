@@ -56,15 +56,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="selectedTile.png">
-      <Name>selectedTile</Name>
+    <Compile Include="pieces.png">
+      <Name>pieces</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="pieces.png">
-      <Name>pieces</Name>
+    <Compile Include="selection.png">
+      <Name>selection</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

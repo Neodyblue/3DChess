@@ -73,14 +73,14 @@ namespace _3DChess
         public static void Update()
         {
             MouseState mouseState = Mouse.GetState();
-            if (mouseState.LeftButton == ButtonState.Pressed)
-            {
-                Vector3 selected = ScreenToBoard(mouseState.X, mouseState.Y);
-                if (selected.X >= 0 && selected.X < 8 && selected.Y >= 0 && selected.Y < 8 && selected.Z >= 0 && selected.Z < 3)
-                    selectedPiece = board[(int)selected.X, (int)selected.Y, (int)selected.Z];
-                else
-                    selectedPiece = null;
-            }
+
+            if (mouseState.LeftButton != ButtonState.Pressed) return;
+
+            Vector3 selected = ScreenToBoard(mouseState.X, mouseState.Y);
+            if (selected.X >= 0 && selected.X < 8 && selected.Y >= 0 && selected.Y < 8 && selected.Z >= 0 && selected.Z < 3)
+                selectedPiece = board[(int)selected.X, (int)selected.Y, (int)selected.Z];
+            else
+                selectedPiece = null;
         }
 
         public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -97,6 +97,7 @@ namespace _3DChess
                             screenCoord,
                             Color.White
                         );
+
                         if (board[i, j, k].PieceType != Type.Empty)
                         {
                             spriteBatch.Draw(
@@ -149,10 +150,7 @@ namespace _3DChess
 
         public static bool IsInBound(Vector3 vector)
         {
-            if (vector.X > 7 || vector.X < 0 || vector.Y > 7 || vector.Y < 0 || vector.Z > 2 || vector.Z < 0)
-                return false;
-            else
-                return true;
+            return !(vector.X > 7) && !(vector.X < 0) && !(vector.Y > 7) && !(vector.Y < 0) && !(vector.Z > 2) && !(vector.Z < 0);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace _3DChess
         {
             Board.Initialize(this);
             this.IsMouseVisible = true;
-            this.graphics.IsFullScreen = false;
+            this.graphics.IsFullScreen = true;
             this.graphics.ApplyChanges();
 
             screenWidth = this.Window.ClientBounds.Width;

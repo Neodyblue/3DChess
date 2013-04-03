@@ -42,7 +42,7 @@ namespace _3DChess
         {
             Board.Initialize(this);
             this.IsMouseVisible = true;
-            this.graphics.IsFullScreen = true;
+            this.graphics.IsFullScreen = false;
             this.graphics.ApplyChanges();
 
             screenWidth = this.Window.ClientBounds.Width;
@@ -80,7 +80,7 @@ namespace _3DChess
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-
+            Board.Update();
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -97,7 +97,7 @@ namespace _3DChess
             }
             else
             { 
-                GraphicsDevice.Clear(Color.Green);
+                GraphicsDevice.Clear(Color.Blue);
                 Board.Draw(gameTime, spriteBatch);
             }
 

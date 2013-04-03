@@ -18,8 +18,10 @@ namespace _3DChess
         static Texture2D whiteTile;
         static Texture2D blackTile;
         static Texture2D selectedTile;
+        static Texture2D possibleMove;
         static Game game;
         static Texture2D pieces;
+        static Piece selectedPiece = null;
 
         public static void Initialize(Game g)
         {
@@ -65,6 +67,7 @@ namespace _3DChess
             blackTile = contentManager.Load<Texture2D>("blackTile");
             selectedTile = contentManager.Load<Texture2D>("selection");
             pieces = contentManager.Load<Texture2D>("pieces");
+            possibleMove = contentManager.Load<Texture2D>("possibleMove");
         }
 
         public static void Update()
@@ -74,9 +77,9 @@ namespace _3DChess
             {
                 Vector3 selected = ScreenToBoard(mouseState.X, mouseState.Y);
                 if (selected.X >= 0 && selected.X < 8 && selected.Y >= 0 && selected.Y < 8 && selected.Z >= 0 && selected.Z < 3)
-                {
-                    board[(int)selected.X, (int)selected.Y, (int)selected.Z].IsSelected = true;
-                }
+                    selectedPiece = board[(int)selected.X, (int)selected.Y, (int)selected.Z];
+                else
+                    selectedPiece = null;
             }
         }
 
@@ -102,6 +105,13 @@ namespace _3DChess
                                 new Rectangle((int)board[i, j, k].PieceType * 21, board[i, j, k].IsWhite ? 0 : 21, 21, 21),
                                 Color.White
                                 );
+                            foreach (Vector3 v in selectedPiece.GetPossibleMoves())
+                            {
+                                spriteBatch.Draw(
+                                    possibleMove,
+                                    BoardToScreen((int)v.X, (int)v.Y, (int)v.Z),
+                                    Color.White);
+                            }
                         }
                     }
                 }

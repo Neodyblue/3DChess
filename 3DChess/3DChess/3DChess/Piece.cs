@@ -46,25 +46,25 @@ namespace _3DChess
                     {
                         if (i == Position.Z)
                         {
-                            for (int j = 1; j <= 8; j++)
+                            for (int j = 1; j < 8; j++)
                             {
                                 possibleMoves.Add(new Vector3(Position.X + j, Position.Y + j, Position.Z));
                                 if (Board.board[(int) (Position.X + j), (int) (Position.Y + j), i].IsWhite == !IsWhite) break;
                             }
 
-                            for (int j = 1; j <= 8; j++)
+                            for (int j = 1; j < 8; j++)
                             {
                                 possibleMoves.Add(new Vector3(Position.X - j, Position.Y - j, Position.Z));
                                 if (Board.board[(int)(Position.X + j), (int)(Position.Y + j), i].IsWhite == !IsWhite) break;
                             }
 
-                            for (int j = 1; j <= 8; j++)
+                            for (int j = 1; j < 8; j++)
                             {
                                 possibleMoves.Add(new Vector3(Position.X - j, Position.Y + j, Position.Z));
                                 if (Board.board[(int)(Position.X + j), (int)(Position.Y + j), i].IsWhite == !IsWhite) break;
                             }
 
-                            for (int j = 1; j <= 8; j++)
+                            for (int j = 1; j < 8; j++)
                             {
                                 possibleMoves.Add(new Vector3(Position.X + j, Position.Y - j, Position.Z));
                                 if (Board.board[(int)(Position.X + j), (int)(Position.Y + j), i].IsWhite == !IsWhite) break;

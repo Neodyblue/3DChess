@@ -42,11 +42,14 @@ namespace _3DChess
         {
             Board.Initialize(this);
             this.IsMouseVisible = true;
+            graphics.PreferredBackBufferHeight = 900;
+            graphics.PreferredBackBufferWidth = 1680;
             this.graphics.IsFullScreen = true;
             this.graphics.ApplyChanges();
 
             screenWidth = this.Window.ClientBounds.Width;
             screenHeight = this.Window.ClientBounds.Height;
+
             this.graphics.ApplyChanges();
 
             base.Initialize();

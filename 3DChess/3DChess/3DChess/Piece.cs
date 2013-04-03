@@ -25,22 +25,32 @@ namespace _3DChess
             switch (PieceType)
             {
                 case Type.Pawn:
+                    #region Pawn
                     for (int i = 0; i < 3; i++)
                     {
                         if (i == Position.Z)
                         {
-                            //TODO: promotion
+                            //TODO: promotion + en passant
                             possibleMoves.Add(IsWhite
                                                   ? new Vector3(Position.X, Position.Y + 1, i)
                                                   : new Vector3(Position.X, Position.Y - 1, i));
+
+                            if (Board.IsInBound(new Vector3((int) (Position.X + 1),(int) (IsWhite ? Position.Y + 1 : Position.Y - 1), i)) && Board.board[(int) (Position.X + 1), (int) (IsWhite ? Position.Y + 1 : Position.Y - 1), i].IsWhite == !IsWhite)
+                                possibleMoves.Add(new Vector3((int) (Position.X + 1),(int) (IsWhite ? Position.Y + 1 : Position.Y - 1), i));
+
+                            if (Board.IsInBound(new Vector3((int)(Position.X + 1), (int)(IsWhite ? Position.Y + 1 : Position.Y - 1), i)) && Board.board[(int)(Position.X - 1), (int)(IsWhite ? Position.Y + 1 : Position.Y - 1), i].IsWhite == !IsWhite)
+                                possibleMoves.Add(new Vector3((int)(Position.X + 1), (int)(IsWhite ? Position.Y + 1 : Position.Y - 1), i));
+
                             continue;
                         }
 
                         possibleMoves.Add(new Vector3(Position.X, Position.Y, i));
                     }
+                    #endregion
                     break;
 
                 case Type.Bishop:
+                    #region Bishop
                     for (int i = 0; i < 3; i++)
                     {
                         if (i == Position.Z)
@@ -76,9 +86,26 @@ namespace _3DChess
                         possibleMoves.Add(new Vector3(Position.X, Position.Y - Math.Abs(i - Position.Z), i));
                         possibleMoves.Add(new Vector3(Position.X, Position.Y + Math.Abs(i - Position.Z), i));
                     }
+                    #endregion
                     break;
-                case Type.King:
 
+                case Type.King:
+                    #region King
+                    for (int i = 0; i < 3; i++)
+                    {
+                        possibleMoves.Add(new Vector3(Position.X, Position.Y - 1, i));
+                        possibleMoves.Add(new Vector3(Position.X, Position.Y, i));
+                        possibleMoves.Add(new Vector3(Position.X, Position.Y + 1, i));
+
+                        possibleMoves.Add(new Vector3(Position.X + 1, Position.Y - 1, i));
+                        possibleMoves.Add(new Vector3(Position.X + 1, Position.Y, i));
+                        possibleMoves.Add(new Vector3(Position.X + 1, Position.Y + 1, i));
+
+                        possibleMoves.Add(new Vector3(Position.X - 1, Position.Y - 1, i));
+                        possibleMoves.Add(new Vector3(Position.X - 1, Position.Y, i));
+                        possibleMoves.Add(new Vector3(Position.X - 1, Position.Y + 1, i));
+                    }
+                    #endregion
                     break;
             }
 

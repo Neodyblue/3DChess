@@ -1,33 +1,3 @@
-<<<<<<< HEAD
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace _3DChess
-{
-    class Piece
-    {
-        public Type type;
-        public bool white;
-        public bool selected;
-        public Type Type
-        {
-            get { return type; }
-        }
-        public bool White
-        {
-            get { return white; }
-        }
-
-        public Piece(Type type, bool white)
-        {
-            this.type = type;
-            this.white = white;
-        }
-    }
-}
-=======
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,4 +86,3 @@ namespace _3DChess
         }
     }
 }
->>>>>>> 4ad339c5ae57129ba33cef05fc7e8b2fed46685c

@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 Content\blackTile.xnb
 Content\whiteTile.xnb
 Content\pieces.xnb
 Content\selection.xnb
+=======
+Content\blackTile.xnb
+Content\whiteTile.xnb
+Content\selectedTile.xnb
+Content\pieces.xnb
+>>>>>>> 4ad339c5ae57129ba33cef05fc7e8b2fed46685c

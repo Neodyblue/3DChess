@@ -11,6 +11,7 @@ namespace _3DChess
         public Type PieceType { get; private set; }
         public bool IsWhite { get; private set; }
         public Vector3 Position { get; set; }
+        public bool IsSelected { get; set; }
 
         public Piece(Type type, bool white)
         {

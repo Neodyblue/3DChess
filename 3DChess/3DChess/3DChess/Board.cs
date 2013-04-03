@@ -50,6 +50,10 @@ namespace _3DChess
             board[7, 7, 2] = new Piece(Type.Root, false);
             for (int i = 0; i < 8; i++)
                 board[i, 6, 2] = new Piece(Type.Pawn, false);
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                    for (int k = 0; k < 3; k++)
+                        board[i, j, k].Position = new Vector3(i, j, k);
             XBase = new int[3];
             YBase = new int[3];
             XBase[0] = 500;

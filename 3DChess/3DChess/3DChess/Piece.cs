@@ -85,11 +85,11 @@ namespace _3DChess
                     #endregion
                     break;
             }
-
-            return possibleMoves.Where(current => Board.IsInBound(current) && current != Position);
+            return possibleMoves;
+            // return possibleMoves.Where(current => Board.IsInBound(current) && current != Position);
         }
 
-        public List<Vector3> GetPossibleCasesFromStartingPointAndDirection(Vector3 v, int dx, int dy, int dz)
+        private List<Vector3> GetPossibleCasesFromStartingPointAndDirection(Vector3 v, int dx, int dy, int dz)
         {
             List<Vector3> l = new List<Vector3>();
             if (v.X + dx >= 0 && v.X + dx < 8 && v.Y + dy >= 0 && v.Y + dy < 8 && v.Z + dz >= 0 && v.Z + dz < 3 && Board.board[(int)v.X + dx, (int)v.Y + dy, (int)v.Z + dz].PieceType == Type.Empty)

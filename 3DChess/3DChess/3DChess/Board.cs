@@ -18,10 +18,11 @@ namespace _3DChess
         static Texture2D whiteTile;
         static Texture2D blackTile;
         static Texture2D selectedTile;
-        static Texture2D possibleMove;
+        static Texture2D possibleMoveTexture;
         static Game game;
         static Texture2D pieces;
-        static Piece selectedPiece = null;
+        static Piece selectedCase = null;
+        static Tuple<Piece, List<Vector3>> possibleMove = new Tuple<Piece, List<Vector3>>(null, new List<Vector3>());
 
         public static void Initialize(Game g)
         {
@@ -71,7 +72,7 @@ namespace _3DChess
             blackTile = contentManager.Load<Texture2D>("blackTile");
             selectedTile = contentManager.Load<Texture2D>("selection");
             pieces = contentManager.Load<Texture2D>("pieces");
-            possibleMove = contentManager.Load<Texture2D>("possibleMove");
+            possibleMoveTexture = contentManager.Load<Texture2D>("possibleMove");
         }
 
         public static void Update()
@@ -82,9 +83,19 @@ namespace _3DChess
 
             Vector3 selected = ScreenToBoard(mouseState.X, mouseState.Y);
             if (selected.X >= 0 && selected.X < 8 && selected.Y >= 0 && selected.Y < 8 && selected.Z >= 0 && selected.Z < 3)
-                selectedPiece = board[(int)selected.X, (int)selected.Y, (int)selected.Z];
+            {
+                selectedCase = board[(int)selected.X, (int)selected.Y, (int)selected.Z];
+                if (selectedCase.PieceType != Type.Empty)
+                    possibleMove = new Tuple<Piece, List<Vector3>>(selectedCase, (List<Vector3>)selectedCase.GetPossibleMoves());
+                else if (possibleMove.Item2.Contains(selectedCase.Position))
+                {
+                    board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
+                    board[(int)selectedCase.Position.X, (int)selectedCase.Position.Y, (int)selectedCase.Position.Z] = possibleMove.Item1;
+                    possibleMove.Item1.Position = selectedCase.Position;
+                }
+            }
             else
-                selectedPiece = null;
+                selectedCase = null;
         }
 
         public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -95,6 +106,7 @@ namespace _3DChess
                 {
                     for (int j = 0; j < 8; j++)
                     {
+                        // afficher toutes les cases
                         Vector2 screenCoord = BoardToScreen(i, j, k);
                         spriteBatch.Draw(
                             (i + j + k) % 2 == 0 ? whiteTile : blackTile,
@@ -104,24 +116,28 @@ namespace _3DChess
 
                         if (board[i, j, k].PieceType != Type.Empty)
                         {
+                            // afficher les pieces du jeu
                             spriteBatch.Draw(
                                 pieces,
                                 new Vector2(screenCoord.X + blackTile.Width / 2 - 10, screenCoord.Y + blackTile.Height / 2 - 10),
                                 new Rectangle((int)board[i, j, k].PieceType * 21, board[i, j, k].IsWhite ? 0 : 21, 21, 21),
                                 Color.White
                                 );
-                            foreach (Vector3 v in selectedPiece.GetPossibleMoves())
-                            {
-                                spriteBatch.Draw(
-                                    possibleMove,
-                                    BoardToScreen((int)v.X, (int)v.Y, (int)v.Z),
-                                    Color.White);
-                            }
                         }
                     }
                 }
             }
 
+            // afficher les cases sur lesquelles peut aller la piece selectionnee
+            foreach (Vector3 v in selectedCase.GetPossibleMoves())
+            {
+                spriteBatch.Draw(
+                    possibleMoveTexture,
+                    BoardToScreen((int)v.X, (int)v.Y, (int)v.Z),
+                    Color.White);
+            }
+
+            // encadrer la case survolee par la souris
             Vector3 mouseBoard = ScreenToBoard(Mouse.GetState().X, Mouse.GetState().Y);
             if (mouseBoard.X >= 0 && mouseBoard.X < 8 && mouseBoard.Y >= 0 && mouseBoard.Y < 8 && mouseBoard.Z >= 0 && mouseBoard.Z < 3)
             {

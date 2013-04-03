@@ -11,14 +11,15 @@ using Microsoft.Xna.Framework.Media;
 
 namespace _3DChess
 {
-    public enum Type
+    enum Type
     {
-        King, //roi
-        Queen, //reine
-        Bishop, //fou
-        Knight, //cavalier
-        Root, //tour
-        Pawn //pion
+        Queen = 0,
+        King = 1,
+        Root = 2,
+        Pawn = 3,
+        Bishop = 4,
+        Knight = 5,
+        Empty
     }
 
     public class Game1 : Microsoft.Xna.Framework.Game

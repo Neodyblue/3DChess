@@ -1,6 +1,7 @@
 Content\blackTile.xnb
 Content\whiteTile.xnb
-Content\selectedTile.xnb
+Content\pieces.xnb
+Content\selection.xnb
 Content\ChessMenu.xnb
 Content\PlayButton.xnb
 Content\QuitButton.xnb

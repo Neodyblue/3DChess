@@ -11,7 +11,8 @@ using Microsoft.Xna.Framework.Media;
 
 namespace _3DChess
 {
-    enum Type
+
+   public  enum Type
         {
             King,
             Queen,
@@ -29,7 +30,7 @@ namespace _3DChess
         SpriteBatch spriteBatch;
         int screenWidth, screenHeight;
 
-        
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -42,9 +43,11 @@ namespace _3DChess
             this.IsMouseVisible = true;
             this.graphics.IsFullScreen = true;
             this.graphics.ApplyChanges();
+
             screenWidth = this.Window.ClientBounds.Width;
             screenHeight = this.Window.ClientBounds.Height;
             this.graphics.ApplyChanges();
+
             base.Initialize();
         }
 
@@ -52,7 +55,9 @@ namespace _3DChess
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             Menu.LoadContent(Content, screenWidth, screenHeight);
+
             Board.LoadContent(Content);
         }
 
@@ -64,10 +69,17 @@ namespace _3DChess
         protected override void Update(GameTime gameTime)
         {
 
+
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
             Menu.Update(gameTime, ref MenuRunning);
+
+            // Allows the game to exit
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                this.Exit();
+
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -87,6 +99,8 @@ namespace _3DChess
                 GraphicsDevice.Clear(Color.Green);
                 Board.Draw(gameTime, spriteBatch);
             }
+
+            
             spriteBatch.End();
 
             base.Draw(gameTime);

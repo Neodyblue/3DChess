@@ -26,6 +26,8 @@ namespace _3DChess
             switch (PieceType)
             {
                 case Type.Pawn:
+
+                    #region Pawn
                     for (int i = 0; i < 3; i++)
                     {
                         if (i == Position.Z)
@@ -38,10 +40,25 @@ namespace _3DChess
                         }
 
                         possibleMoves.Add(new Vector3(Position.X, Position.Y, i));
+
+                        var enemyLeft = new Vector3(Position.X - 1, IsWhite ? Position.Y + 1 : Position.Y - 1,
+                                                    Position.Z);
+                        var enemyRight = new Vector3(Position.X + 1, IsWhite ? Position.Y + 1 : Position.Y - 1,
+                                                     Position.Z);
+
+                        if (Board.IsInBound(enemyLeft) &&
+                            Board.board[(int) enemyLeft.X, (int) enemyLeft.Y, (int) enemyLeft.Z].IsWhite == !IsWhite)
+                            possibleMoves.Add(enemyLeft);
+
+                        if (Board.IsInBound(enemyRight) &&
+                            Board.board[(int) enemyRight.X, (int) enemyRight.Y, (int) enemyRight.Z].IsWhite == !IsWhite)
+                            possibleMoves.Add(enemyRight);
                     }
+                    #endregion
                     break;
 
                 case Type.Bishop:
+                    #region Bishop
                     for (int i = 0; i < 3; i++)
                     {
                         if (i == Position.Z)
@@ -77,9 +94,14 @@ namespace _3DChess
                         possibleMoves.Add(new Vector3(Position.X, Position.Y - Math.Abs(i - Position.Z), i));
                         possibleMoves.Add(new Vector3(Position.X, Position.Y + Math.Abs(i - Position.Z), i));
                     }
+                    #endregion
                     break;
-                case Type.King:
 
+                case Type.King:
+                    for (int i = 0; i < 3; i++)
+                        for (int j = 0; j < 3; j++)
+                            for (int k = 0; k < 3; k++)
+                                possibleMoves.Add(new Vector3(Position.X + (j - 1), Position.Y + (k - 1), i));
                     break;
 
                 case Type.Root:
@@ -99,7 +121,7 @@ namespace _3DChess
                     break;
             }
 
-            return possibleMoves.Where(Board.IsInBound);
+            return possibleMoves.Where(current => Board.IsInBound(current) && current != Position);
         }
     }
 }

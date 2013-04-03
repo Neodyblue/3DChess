@@ -81,6 +81,22 @@ namespace _3DChess
                 case Type.King:
 
                     break;
+
+                case Type.Root:
+                    #region root
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (i == Position.Z) continue;
+                        possibleMoves.Add(new Vector3(Position.X, Position.Y, i));
+                    }
+                    for (int j = 1; j < 8; j++)
+                    {
+                        Vector3 pos = new Vector3(Position.X + j, Position.Y, Position.Z);
+                        possibleMoves.Add(pos);
+                        //if(Board.IsInBound(pos) && Board.board[pos.X, pos.Y, pos.Z].PieceType != ) ATTENTE DU MERGE
+                    }
+                    #endregion
+                    break;
             }
 
             return possibleMoves.Where(Board.IsInBound);

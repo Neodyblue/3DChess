@@ -47,6 +47,8 @@ namespace _3DChess
                             possibleMoves.Add(new Vector3(Position.X, Position.Y, Position.Z + 1));
                         if (Position.Y < 7 && Board.board[(int)Position.X, (int)Position.Y + 1, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3(Position.X, Position.Y + 1, Position.Z));
+                        if(Position.Y == 1 && Board.board[(int)Position.X, (int)Position.Y + 2, (int)Position.Z].PieceType == Type.Empty)
+                            possibleMoves.Add(new Vector3((int)Position.X, (int)Position.Y + 2, (int)Position.Z));
                     }
                     else // !IsWhite
                     {
@@ -54,6 +56,8 @@ namespace _3DChess
                             possibleMoves.Add(new Vector3(Position.X, Position.Y, Position.Z - 1));
                         if (Position.Y > 0 && Board.board[(int)Position.X, (int)Position.Y - 1, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3(Position.X, Position.Y - 1, Position.Z));
+                        if (Position.Y == 6 && Board.board[(int)Position.X, (int)Position.Y - 2, (int)Position.Z].PieceType == Type.Empty)
+                            possibleMoves.Add(new Vector3((int)Position.X, (int)Position.Y - 2, (int)Position.Z));
                     }
                     #endregion
                     break;
@@ -87,8 +91,10 @@ namespace _3DChess
                     #region root
                     possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 1, 0, 0));
                     possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, -1, 0, 0));
+
                     possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, 1, 0));
                     possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, -1, 0));
+
                     possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, 0, 1));
                     possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, 0, -1));
                     #endregion

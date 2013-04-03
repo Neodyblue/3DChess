@@ -32,24 +32,24 @@ namespace _3DChess
                 for (int j = 0; j < 8; j++)
                     for (int k = 0; k < 3; k++)
                         board[i, j, k] = new Piece(Type.Empty, true);
-            board[0, 0, 0] = new Piece(Type.Root, true);
+            board[0, 0, 0] = new Piece(Type.Rook, true);
             board[1, 0, 0] = new Piece(Type.Knight, true);
             board[2, 0, 0] = new Piece(Type.Bishop, true);
             board[3, 0, 0] = new Piece(Type.Queen, true);
             board[4, 0, 0] = new Piece(Type.King, true);
             board[5, 0, 0] = new Piece(Type.Bishop, true);
             board[6, 0, 0] = new Piece(Type.Knight, true);
-            board[7, 0, 0] = new Piece(Type.Root, true);
+            board[7, 0, 0] = new Piece(Type.Rook, true);
             for (int i = 0; i < 8; i++)
                 board[i, 1, 0] = new Piece(Type.Pawn, true);
-            board[0, 7, 2] = new Piece(Type.Root, false);
+            board[0, 7, 2] = new Piece(Type.Rook, false);
             board[1, 7, 2] = new Piece(Type.Knight, false);
             board[2, 7, 2] = new Piece(Type.Bishop, false);
             board[3, 7, 2] = new Piece(Type.Queen, false);
             board[4, 7, 2] = new Piece(Type.King, false);
             board[5, 7, 2] = new Piece(Type.Bishop, false);
             board[6, 7, 2] = new Piece(Type.Knight, false);
-            board[7, 7, 2] = new Piece(Type.Root, false);
+            board[7, 7, 2] = new Piece(Type.Rook, false);
             for (int i = 0; i < 8; i++)
                 board[i, 6, 2] = new Piece(Type.Pawn, false);
             for (int i = 0; i < 8; i++)
@@ -88,14 +88,16 @@ namespace _3DChess
                 selectedCase = board[(int)selected.X, (int)selected.Y, (int)selected.Z];
                 if (selectedCase.PieceType != Type.Empty && whiteToPlay == selectedCase.IsWhite)
                     possibleMove = new Tuple<Piece, List<Vector3>>(selectedCase, (List<Vector3>)selectedCase.GetPossibleMoves());
-                else if (possibleMove.Item2.Contains(selectedCase.Position))
+                else
                 {
-                    board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
-                    board[(int)selectedCase.Position.X, (int)selectedCase.Position.Y, (int)selectedCase.Position.Z] = possibleMove.Item1;
-                    possibleMove.Item1.Position = selectedCase.Position;
-                    selectedCase = new Piece(Type.Empty, true);
-                    possibleMove = new Tuple<Piece, List<Vector3>>(new Piece(Type.Empty, true), new List<Vector3>());
-                    whiteToPlay = !whiteToPlay;
+                    if (possibleMove.Item2.Contains(selected))
+                    {
+                        board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
+                        board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;
+                        board[(int)selected.X, (int)selected.Y, (int)selected.Z].Position = selected;
+                        whiteToPlay = !whiteToPlay;
+                    }
+                    possibleMove = new Tuple<Piece, List<Vector3>>(new Piece(Type.Empty), new List<Vector3>());
                 }
             }
             else

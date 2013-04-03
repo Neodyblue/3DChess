@@ -16,7 +16,7 @@ namespace _3DChess
     {
         Queen = 0,
         King = 1,
-        Root = 2,
+        Rook = 2,
         Pawn = 3,
         Bishop = 4,
         Knight = 5,
@@ -26,7 +26,7 @@ namespace _3DChess
     public class Game1 : Microsoft.Xna.Framework.Game
     {
 
-        bool MenuRunning = true;
+        bool menuRunning = true;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         int screenWidth, screenHeight;
@@ -77,7 +77,8 @@ namespace _3DChess
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-            Menu.Update(gameTime, ref MenuRunning);
+            if (menuRunning)
+                Menu.Update(gameTime, ref menuRunning);
 
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
@@ -87,7 +88,7 @@ namespace _3DChess
             // TODO: Add your update logic here
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                MenuRunning = true;
+                menuRunning = true;
             }
             base.Update(gameTime);
         }
@@ -97,7 +98,7 @@ namespace _3DChess
             
 
             spriteBatch.Begin();
-            if (MenuRunning)
+            if (menuRunning)
             {
                 Menu.Draw(gameTime, spriteBatch,screenWidth, screenHeight);
             }

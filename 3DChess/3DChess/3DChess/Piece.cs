@@ -13,10 +13,23 @@ namespace _3DChess
         public Vector3 Position { get; set; }
         public bool IsSelected { get; set; }
 
+        public Piece(Type type)
+        {
+            PieceType = type;
+            IsWhite = true;
+        }
+
         public Piece(Type type, bool white)
         {
             PieceType = type;
             IsWhite = white;
+        }
+
+        public Piece(Type type, bool white, Vector3 pos)
+        {
+            PieceType = type;
+            IsWhite = white;
+            Position = pos;
         }
 
         public IEnumerable<Vector3> GetPossibleMoves()
@@ -70,20 +83,35 @@ namespace _3DChess
                                     possibleMoves.Add(new Vector3(Position.X + i, Position.Y + j, Position.Z + k));
                     break;
 
-                case Type.Root:
+                case Type.Rook:
                     #region root
-                    for (int i = 0; i < 3; i++)
-                    {
-                        if (i == Position.Z) continue;
-                        possibleMoves.Add(new Vector3(Position.X, Position.Y, i));
-                    }
-                    for (int j = 1; j < 8; j++)
-                    {
-                        Vector3 pos = new Vector3(Position.X + j, Position.Y, Position.Z);
-                        possibleMoves.Add(pos);
-                        //if(Board.IsInBound(pos) && Board.board[pos.X, pos.Y, pos.Z].PieceType != ) ATTENTE DU MERGE
-                    }
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 1, 0, 0));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, -1, 0, 0));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, 1, 0));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, -1, 0));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, 0, 1));
+                    possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, 0, -1));
                     #endregion
+                    break;
+                case Type.Queen:
+                #region queen
+                    possibleMoves.AddRange(new Piece(Type.Bishop, true, Position).GetPossibleMoves());
+                    possibleMoves.AddRange(new Piece(Type.Rook, true, Position).GetPossibleMoves());
+                #endregion queen
+                    break;
+                case Type.Knight:
+                #region knight
+                    for (int i = -2; i < 3; i++)
+                        for (int j = -2; j < 3; j++)
+                            for (int k = -2; k < 3; k++)
+                            {
+                                Vector3 v = new Vector3(Position.X + i, Position.Y + j, Position.Z + k);
+                                if (Board.IsInBound(v) && Board.board[(int)v.X, (int)v.Y, (int)v.Z].PieceType == Type.Empty && Math.Abs(i) + Math.Abs(j) + Math.Abs(k) == 3 && (i == 0 || j == 0 || k == 0))
+                                {
+                                    possibleMoves.Add(v);
+                                }
+                            }
+                #endregion knight
                     break;
             }
             return possibleMoves;

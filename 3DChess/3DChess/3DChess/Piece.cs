@@ -18,30 +18,71 @@ namespace _3DChess
             IsWhite = white;
         }
 
-        private IEnumerable<Vector3> GetPossibleMoves()
+        public IEnumerable<Vector3> GetPossibleMoves()
         {
             var possibleMoves = new List<Vector3>();
 
             switch (PieceType)
             {
                 case Type.Pawn:
-                case Type.Bishop:
-                    for (int i = 0; i < 3 && i != Position.Z; i++)
+                    for (int i = 0; i < 3; i++)
                     {
+                        if (i == Position.Z)
+                        {
+                            //TODO: promotion
+                            possibleMoves.Add(IsWhite
+                                                  ? new Vector3(Position.X, Position.Y + 1, i)
+                                                  : new Vector3(Position.X, Position.Y - 1, i));
+                            continue;
+                        }
+
+                        possibleMoves.Add(new Vector3(Position.X, Position.Y, i));
+                    }
+                    break;
+
+                case Type.Bishop:
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (i == Position.Z)
+                        {
+                            for (int j = 1; j <= 8; j++)
+                            {
+                                possibleMoves.Add(new Vector3(Position.X + j, Position.Y + j, Position.Z));
+                                if (Board.board[(int) (Position.X + j), (int) (Position.Y + j), i].IsWhite == !IsWhite) break;
+                            }
+
+                            for (int j = 1; j <= 8; j++)
+                            {
+                                possibleMoves.Add(new Vector3(Position.X - j, Position.Y - j, Position.Z));
+                                if (Board.board[(int)(Position.X + j), (int)(Position.Y + j), i].IsWhite == !IsWhite) break;
+                            }
+
+                            for (int j = 1; j <= 8; j++)
+                            {
+                                possibleMoves.Add(new Vector3(Position.X - j, Position.Y + j, Position.Z));
+                                if (Board.board[(int)(Position.X + j), (int)(Position.Y + j), i].IsWhite == !IsWhite) break;
+                            }
+
+                            for (int j = 1; j <= 8; j++)
+                            {
+                                possibleMoves.Add(new Vector3(Position.X + j, Position.Y - j, Position.Z));
+                                if (Board.board[(int)(Position.X + j), (int)(Position.Y + j), i].IsWhite == !IsWhite) break;
+                            }
+                            continue;
+                        }
+
                         possibleMoves.Add(new Vector3(Position.X + Math.Abs(i - Position.Z), Position.Y, i));
                         possibleMoves.Add(new Vector3(Position.X - Math.Abs(i - Position.Z), Position.Y, i));
                         possibleMoves.Add(new Vector3(Position.X, Position.Y - Math.Abs(i - Position.Z), i));
                         possibleMoves.Add(new Vector3(Position.X, Position.Y + Math.Abs(i - Position.Z), i));
                     }
-                    for (int i = 1; i <= 8; i++)
-                    {
-
-                    }
                     break;
                 case Type.King:
+
                     break;
             }
-            return possibleMoves.Where(vector => Board.IsInBound(vector));
+
+            return possibleMoves.Where(Board.IsInBound);
         }
     }
 }

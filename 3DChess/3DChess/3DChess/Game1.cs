@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace _3DChess
 {
-    enum Type
+    public enum Type
     {
         Queen = 0,
         King = 1,

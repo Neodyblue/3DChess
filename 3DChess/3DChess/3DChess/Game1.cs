@@ -31,7 +31,6 @@ namespace _3DChess
         SpriteBatch spriteBatch;
         int screenWidth, screenHeight;
 
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -44,14 +43,14 @@ namespace _3DChess
             this.IsMouseVisible = true;
             graphics.PreferredBackBufferHeight = 900;
             graphics.PreferredBackBufferWidth = 1680;
-            this.graphics.IsFullScreen = true;
+            this.graphics.IsFullScreen = false;
             this.graphics.ApplyChanges();
 
             screenWidth = this.Window.ClientBounds.Width;
             screenHeight = this.Window.ClientBounds.Height;
 
             this.graphics.ApplyChanges();
-
+            
             base.Initialize();
         }
 
@@ -72,8 +71,6 @@ namespace _3DChess
 
         protected override void Update(GameTime gameTime)
         {
-
-
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -95,20 +92,17 @@ namespace _3DChess
 
         protected override void Draw(GameTime gameTime)
         {
-            
-
             spriteBatch.Begin();
             if (menuRunning)
             {
                 Menu.Draw(gameTime, spriteBatch,screenWidth, screenHeight);
             }
             else
-            { 
+            {
                 GraphicsDevice.Clear(Color.Blue);
+
                 Board.Draw(gameTime, spriteBatch);
             }
-
-            
             spriteBatch.End();
 
             base.Draw(gameTime);

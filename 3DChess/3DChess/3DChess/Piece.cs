@@ -83,8 +83,7 @@ namespace _3DChess
                     for (int i = -1; i < 2; i++)
                         for (int j = -1; j < 2; j++)
                             for (int k = -1; k < 2; k++)
-                                if (Board.IsInBound(new Vector3(Position.X + i, Position.Y + j, Position.Z + k)) && (Board.board[(int)Position.X + i, (int)Position.Y + j, (int)Position.Z + k].PieceType == Type.Empty || (Board.board[(int)Position.X + i, (int)Position.Y + j, (int)Position.Z + k].IsWhite != IsWhite && Board.board[(int)Position.X + i, (int)Position.Y + j, (int)Position.Z + k].PieceType != Type.King)))
-                                    possibleMoves.Add(new Vector3(Position.X + i, Position.Y + j, Position.Z + k));
+                                possibleMoves.Add(new Vector3(Position.X + i, Position.Y + j, Position.Z + k));
                     break;
 
                 case Type.Rook:
@@ -106,7 +105,6 @@ namespace _3DChess
                         for (int j = (int)-Position.Y; j < 8 - (int)Position.Y; j++)
                             for (int k = (int)-Position.Z; k < 8 - (int)Position.Z; k++)
                                 possibleMoves.Add(new Vector3(Position.X + i, Position.Y + j, Position.Z + k));
-                    possibleMoves.Remove(new Vector3(Position.X, Position.Y, Position.Z));
                     #endregion
                     break;
 
@@ -125,7 +123,10 @@ namespace _3DChess
                     #endregion knight
                     break;
             }
-            return possibleMoves;
+
+            possibleMoves.Remove(new Vector3(Position.X, Position.Y, Position.Z));
+
+            return possibleMoves.Where(vector => Board.IsInBound(vector));
             // return possibleMoves.Where(current => Board.IsInBound(current) && current != Position);
         }
 

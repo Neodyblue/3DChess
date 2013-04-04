@@ -47,7 +47,7 @@ namespace _3DChess
                             possibleMoves.Add(new Vector3(Position.X, Position.Y, Position.Z + 1));
                         if (Position.Y < 7 && Board.board[(int)Position.X, (int)Position.Y + 1, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3(Position.X, Position.Y + 1, Position.Z));
-                        if(Position.Y == 1 && Board.board[(int)Position.X, (int)Position.Y + 2, (int)Position.Z].PieceType == Type.Empty)
+                        if (Position.Y == 1 && Board.board[(int)Position.X, (int)Position.Y + 2, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3((int)Position.X, (int)Position.Y + 2, (int)Position.Z));
                     }
                     else // !IsWhite
@@ -99,14 +99,19 @@ namespace _3DChess
                     possibleMoves.AddRange(GetPossibleCasesFromStartingPointAndDirection(Position, 0, 0, -1));
                     #endregion
                     break;
+
                 case Type.Queen:
-                #region queen
-                    possibleMoves.AddRange(new Piece(Type.Bishop, IsWhite, Position).GetPossibleMoves());
-                    possibleMoves.AddRange(new Piece(Type.Rook, IsWhite, Position).GetPossibleMoves());
-                #endregion queen
+                    #region queen
+                    for (int i = (int)-Position.X; i < 8 - Position.X; i++)
+                        for (int j = (int)-Position.Y; j < 8 - (int)Position.Y; j++)
+                            for (int k = (int)-Position.Z; k < 8 - (int)Position.Z; k++)
+                                possibleMoves.Add(new Vector3(Position.X + i, Position.Y + j, Position.Z + k));
+                    possibleMoves.Remove(new Vector3(Position.X, Position.Y, Position.Z));
+                    #endregion
                     break;
+
                 case Type.Knight:
-                #region knight
+                    #region knight
                     for (int i = -2; i < 3; i++)
                         for (int j = -2; j < 3; j++)
                             for (int k = -2; k < 3; k++)
@@ -117,7 +122,7 @@ namespace _3DChess
                                     possibleMoves.Add(v);
                                 }
                             }
-                #endregion knight
+                    #endregion knight
                     break;
             }
             return possibleMoves;

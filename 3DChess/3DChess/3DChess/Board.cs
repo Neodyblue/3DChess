@@ -19,6 +19,7 @@ namespace _3DChess
         static Texture2D blackTile;
         static Texture2D selectedTile;
         static Texture2D possibleMoveTexture;
+        static Texture2D background;
         static Game game;
         static Texture2D pieces;
         static Piece selectedCase = new Piece(Type.Empty, true);
@@ -74,6 +75,7 @@ namespace _3DChess
             selectedTile = contentManager.Load<Texture2D>("selection");
             pieces = contentManager.Load<Texture2D>("pieces");
             possibleMoveTexture = contentManager.Load<Texture2D>("possibleMove");
+            background = contentManager.Load<Texture2D>("background");
         }
 
         public static void Update()
@@ -106,6 +108,8 @@ namespace _3DChess
 
         public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(background, new Rectangle(0,0,game.Window.ClientBounds.Width, game.Window.ClientBounds.Height), Color.White);
+
             for (int k = 2; k >= 0; k--)
             {
                 for (int i = 0; i < 8; i++)

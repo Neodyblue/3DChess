@@ -140,7 +140,7 @@ namespace _3DChess
                 spriteBatch.Draw(
                     possibleMoveTexture,
                     BoardToScreen((int)v.X, (int)v.Y, (int)v.Z),
-                    Color.White);
+                    board[(int) v.X, (int) v.Y, (int) v.Z].PieceType != Type.Empty ? Color.Red: Color.DarkGreen);
             }
 
             // encadrer la case survolee par la souris

@@ -129,7 +129,7 @@ namespace _3DChess
                             // afficher les pieces du jeu
                             spriteBatch.Draw(
                                 pieces,
-                                new Vector2(screenCoord.X + blackTile.Width / 2 - 10, screenCoord.Y + blackTile.Height / 2 - 10),
+                                new Rectangle((int)screenCoord.X + blackTile.Width / 2 - 14, (int)screenCoord.Y + blackTile.Height / 2 - 14, 29, 29),
                                 new Rectangle((int)board[i, j, k].PieceType * 21, board[i, j, k].IsWhite ? 0 : 21, 21, 21),
                                 Color.White
                                 );
@@ -144,7 +144,7 @@ namespace _3DChess
                 spriteBatch.Draw(
                     possibleMoveTexture,
                     BoardToScreen((int)v.X, (int)v.Y, (int)v.Z),
-                    board[(int) v.X, (int) v.Y, (int) v.Z].PieceType != Type.Empty ? Color.Red: Color.DarkGreen);
+                    board[(int) v.X, (int) v.Y, (int) v.Z].PieceType != Type.Empty ? Color.Red: Color.Green);
             }
 
             // encadrer la case survolee par la souris

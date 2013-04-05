@@ -13,8 +13,8 @@ namespace _3DChess
 {
     static class Tile
     {
-        static int tileStepX = 32;
-        static int tileStepY = 32;
+        static int tileStepX = 48;
+        static int tileStepY = 48;
         public static int TileStepX
         {
             get { return tileStepX; }

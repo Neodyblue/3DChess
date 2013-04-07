@@ -13,8 +13,10 @@ namespace _3DChess
 {
     static class Board
     {
+        public static bool IsRuning { get; set; }
         public static Piece[, ,] board { get; set; }
         static int[] XBase, YBase;
+        static List<Piece> Black, White;
         static Texture2D whiteTile;
         static Texture2D blackTile;
         static Texture2D selectedTile;
@@ -28,6 +30,8 @@ namespace _3DChess
 
         public static void Initialize(Game g)
         {
+            Black = new List<Piece>();
+            White = new List<Piece>();
             board = new Piece[8, 8, 3];
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
@@ -59,6 +63,14 @@ namespace _3DChess
                         board[i, j, k].Position = new Vector3(i, j, k);
             XBase = new int[3];
             YBase = new int[3];
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Black.Add(board[j, 7 - i , 2]);
+                    White.Add(board[j, i, 0]);
+                }
+            }
             XBase[0] = 500;
             XBase[1] = 500;
             XBase[2] = 500;
@@ -66,6 +78,7 @@ namespace _3DChess
             YBase[1] = 205;
             YBase[2] = 410;
             game = g;
+            IsRuning = true;
         }
 
         public static void LoadContent(ContentManager contentManager)
@@ -76,12 +89,61 @@ namespace _3DChess
             pieces = contentManager.Load<Texture2D>("pieces");
             possibleMoveTexture = contentManager.Load<Texture2D>("possibleMove");
             background = contentManager.Load<Texture2D>("background");
+
         }
 
         public static void Update()
         {
             MouseState mouseState = Mouse.GetState();
-
+            if (!whiteToPlay)
+            {
+                Piece BlackKing = Black.Find(x => x.PieceType == Type.King);
+                List<Vector3> moves1 =(List<Vector3>)BlackKing.GetPossibleMoves();
+                foreach (Vector3 v in moves1)
+                {
+                   // bool IsEchec = false;
+                    foreach (Piece p in White)
+                    {
+                        List<Vector3> move1 = (List<Vector3>)p.GetPossibleMoves();
+                        if (move1.Contains(v))
+                        {
+                            //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
+                          //  IsEchec = true;
+                            moves1.Remove(v);
+                        }
+                    }
+                }
+                if (moves1.Count == 0)
+                {
+                    //si il y à echec et mat, ça quitte le jeu, faites mieux si vous pouvez ^^
+                    IsRuning = false;
+                }
+            }
+            else
+            {
+                Piece WhiteKing = White.Find(x => x.PieceType == Type.King);
+                List<Vector3> moves2 = (List<Vector3>)WhiteKing.GetPossibleMoves();
+                foreach (Vector3 v in moves2)
+                {
+                   // bool IsEchec2 = false;
+                    foreach (Piece p in White)
+                    {
+                        List<Vector3> move2 = (List<Vector3>)p.GetPossibleMoves();
+                        if (move2.Contains(v))
+                        {
+                            //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
+                          //  IsEchec2 = true;
+                            moves2.Remove(v);
+                        }
+                    }
+                }
+                if (moves2.Count == 0)
+                {
+                    //si il y à echec et mat, ça quitte le jeu, faites mieux si vous pouvez ^^
+                    IsRuning = false;
+                }
+            }
+            
             if (mouseState.LeftButton != ButtonState.Pressed) return;
 
             Vector3 selected = ScreenToBoard(mouseState.X, mouseState.Y);
@@ -94,10 +156,28 @@ namespace _3DChess
                 {
                     if (possibleMove.Item2.Contains(selected))
                     {
-                        board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
-                        board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;
-                        board[(int)selected.X, (int)selected.Y, (int)selected.Z].Position = selected;
-                        whiteToPlay = !whiteToPlay;
+                        if (selectedCase.PieceType == Type.King)
+                        {
+                            board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
+                            board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;
+                            board[(int)selected.X, (int)selected.Y, (int)selected.Z].Position = selected;
+                            IsRuning = false;
+                        }
+                        else
+                        {
+                            if (whiteToPlay)
+                            {
+                                White.Remove(board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z]);
+                            }
+                            else
+                            {
+                                Black.Remove(board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z]);
+                            }
+                            board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
+                            board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;
+                            board[(int)selected.X, (int)selected.Y, (int)selected.Z].Position = selected;
+                            whiteToPlay = !whiteToPlay;
+                        }
                     }
                     possibleMove = new Tuple<Piece, List<Vector3>>(new Piece(Type.Empty), new List<Vector3>());
                 }
@@ -108,7 +188,7 @@ namespace _3DChess
 
         public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(background, new Rectangle(0,0,game.Window.ClientBounds.Width, game.Window.ClientBounds.Height), Color.White);
+            spriteBatch.Draw(background, new Rectangle(0, 0, game.Window.ClientBounds.Width, game.Window.ClientBounds.Height), Color.White);
 
             for (int k = 2; k >= 0; k--)
             {
@@ -144,7 +224,7 @@ namespace _3DChess
                 spriteBatch.Draw(
                     possibleMoveTexture,
                     BoardToScreen((int)v.X, (int)v.Y, (int)v.Z),
-                    board[(int) v.X, (int) v.Y, (int) v.Z].PieceType != Type.Empty ? Color.Red: Color.Green);
+                    board[(int)v.X, (int)v.Y, (int)v.Z].PieceType != Type.Empty ? Color.Red : Color.Green);
             }
 
             // encadrer la case survolee par la souris

@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace _3DChess
 {
-
+    
     public enum Type
     {
         Queen = 0,
@@ -74,18 +74,28 @@ namespace _3DChess
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-            if (menuRunning)
+            if (menuRunning)            
                 Menu.Update(gameTime, ref menuRunning);
+                
+            
 
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
-            Board.Update();
+            if (Board.IsRuning)
+            {
+                Board.Update(); 
+            }
+            else
+            {
+                this.Exit();
+            }
+            
             // TODO: Add your update logic here
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 menuRunning = true;
+                
             }
             base.Update(gameTime);
         }
@@ -100,8 +110,13 @@ namespace _3DChess
             else
             {
                 GraphicsDevice.Clear(Color.Blue);
+                if (Board.IsRuning)
+                {
+                    Board.Draw(gameTime, spriteBatch);
+                }
 
-                Board.Draw(gameTime, spriteBatch);
+
+               
             }
             spriteBatch.End();
 

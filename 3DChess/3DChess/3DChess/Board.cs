@@ -155,11 +155,11 @@ namespace _3DChess
                         {
                             if (whiteToPlay)
                             {
-                                White.Remove(board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z]);
+                                Black.Remove(board[(int)selected.X, (int)selected.Y, (int)selected.Z]);
                             }
                             else
                             {
-                                Black.Remove(board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z]);
+                                White.Remove(board[(int)selected.X, (int)selected.Y, (int)selected.Z]);
                             }
                             board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
                             board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;

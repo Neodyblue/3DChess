@@ -138,7 +138,7 @@ namespace _3DChess
             if (selected.X >= 0 && selected.X < 8 && selected.Y >= 0 && selected.Y < 8 && selected.Z >= 0 && selected.Z < 3)
             {
                 selectedCase = board[(int)selected.X, (int)selected.Y, (int)selected.Z];
-                if (selectedCase.PieceType != Type.Empty && whiteToPlay == selectedCase.IsWhite && (whiteToPlay ? (!_whiteChess || selectedCase.PieceType == Type.King) : (!_blackChess || selectedCase.PieceType == Type.King)))
+                if (selectedCase.PieceType != Type.Empty && whiteToPlay == selectedCase.IsWhite /*&& (whiteToPlay ? (!_whiteChess || selectedCase.PieceType == Type.King) : (!_blackChess || selectedCase.PieceType == Type.King))*/)
                     possibleMove = new Tuple<Piece, List<Vector3>>(selectedCase, (List<Vector3>)selectedCase.GetPossibleMoves());
                 else
                 {

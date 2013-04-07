@@ -29,7 +29,8 @@ namespace _3DChess
         static bool whiteToPlay = true;
         private static Texture2D _whiteChessImg, _blackChessImg;
         private static bool _whiteChess, _blackChess;
-
+        static List<Vector3> MoveEN = new List<Vector3>();
+        static List<Vector3> MoveE = new List<Vector3>();
         public static void Initialize(Game g)
         {
             Black = new List<Piece>();
@@ -103,7 +104,7 @@ namespace _3DChess
             if (!whiteToPlay)
             {
                 Piece BlackKing = Black.Find(x => x.PieceType == Type.King);
-                List<Vector3> MoveEN = new List<Vector3>();
+                MoveEN.Clear();
                 foreach (Piece p in White)
                 {
                     MoveEN.AddRange((List<Vector3>)p.GetPossibleMoves());
@@ -132,7 +133,7 @@ namespace _3DChess
             else
             {
                 Piece WhiteKing = White.Find(x => x.PieceType == Type.King);
-                List<Vector3> MoveE = new List<Vector3>();
+                MoveE.Clear();
                 foreach (Piece p in Black)
                 {
                     MoveE.AddRange((List<Vector3>)p.GetPossibleMoves());
@@ -237,6 +238,19 @@ namespace _3DChess
             // afficher les cases sur lesquelles peut aller la piece selectionnee
             foreach (Vector3 v in possibleMove.Item2)
             {
+                if (possibleMove.Item1.PieceType == Type.King)
+                {
+                    if (possibleMove.Item1.IsWhite)
+                    {
+                        if (MoveE.Contains(v))
+                            continue;
+                    }
+                    else
+                    {
+                        if (MoveEN.Contains(v))
+                            continue;
+                    }
+                }
                 spriteBatch.Draw(
                     possibleMoveTexture,
                     BoardToScreen((int)v.X, (int)v.Y, (int)v.Z),

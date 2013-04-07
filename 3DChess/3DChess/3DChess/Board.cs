@@ -27,6 +27,7 @@ namespace _3DChess
         static Piece selectedCase = new Piece(Type.Empty, true);
         static Tuple<Piece, List<Vector3>> possibleMove = new Tuple<Piece, List<Vector3>>(null, new List<Vector3>());
         static bool whiteToPlay = true;
+        private static Texture2D _whiteChessImg, _blackChessImg;
         private static bool _whiteChess, _blackChess;
 
         public static void Initialize(Game g)
@@ -90,7 +91,8 @@ namespace _3DChess
             pieces = contentManager.Load<Texture2D>("pieces");
             possibleMoveTexture = contentManager.Load<Texture2D>("possibleMove");
             background = contentManager.Load<Texture2D>("background");
-
+            _whiteChessImg = contentManager.Load<Texture2D>("whitecheck");
+            _blackChessImg = contentManager.Load<Texture2D>("blackcheck");
         }
 
         public static void Update()
@@ -229,6 +231,18 @@ namespace _3DChess
                     Color.White
                     );
             }
+
+            if (_whiteChess)
+                spriteBatch.Draw(_whiteChessImg,
+                                 new Rectangle((game.Window.ClientBounds.Width/2) - _whiteChessImg.Width/2,
+                                               10,
+                                               _whiteChessImg.Width, _whiteChessImg.Height), Color.White);
+
+            if (_blackChess)
+                spriteBatch.Draw(_blackChessImg,
+                                 new Rectangle((game.Window.ClientBounds.Width / 2) - _blackChessImg.Width / 2,
+                                               10,
+                                               _blackChessImg.Width, _blackChessImg.Height), Color.White);
         }
 
         public static Vector2 BoardToScreen(int x, int y, int z)

@@ -47,17 +47,32 @@ namespace _3DChess
                             possibleMoves.Add(new Vector3(Position.X, Position.Y, Position.Z + 1));
                         if (Position.Y < 7 && Board.board[(int)Position.X, (int)Position.Y + 1, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3(Position.X, Position.Y + 1, Position.Z));
-                        if(Position.Y == 1 && Board.board[(int)Position.X, (int)Position.Y + 2, (int)Position.Z].PieceType == Type.Empty)
+                        if (Position.Y == 1 && Board.board[(int)Position.X, (int)Position.Y + 2, (int)Position.Z].PieceType == Type.Empty && Board.board[(int)Position.X, (int)Position.Y + 1, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3((int)Position.X, (int)Position.Y + 2, (int)Position.Z));
+                        if (Position.X + 1 < 8 && Position.Y + 1 < 8 && Board.board[(int)Position.X + 1, (int)Position.Y + 1, (int)Position.Z].IsWhite != IsWhite)
+                            possibleMoves.Add(new Vector3((int)Position.X + 1, (int)Position.Y + 1, (int)Position.Z));
+                        if (Position.X - 1 < 8 && Position.Y + 1 < 8 && Board.board[(int)Position.X - 1, (int)Position.Y + 1, (int)Position.Z].IsWhite != IsWhite)
+                            possibleMoves.Add(new Vector3((int)Position.X - 1, (int)Position.Y + 1, (int)Position.Z));
+
+                        if ((int)Position.Y == 7)
+                            this.PieceType = Type.Queen;
                     }
+
                     else // !IsWhite
                     {
                         if (Position.Z > 0 && Board.board[(int)Position.X, (int)Position.Y, (int)Position.Z - 1].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3(Position.X, Position.Y, Position.Z - 1));
                         if (Position.Y > 0 && Board.board[(int)Position.X, (int)Position.Y - 1, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3(Position.X, Position.Y - 1, Position.Z));
-                        if (Position.Y == 6 && Board.board[(int)Position.X, (int)Position.Y - 2, (int)Position.Z].PieceType == Type.Empty)
+                        if (Position.Y == 6 && Board.board[(int)Position.X, (int)Position.Y - 2, (int)Position.Z].PieceType == Type.Empty && Board.board[(int)Position.X, (int)Position.Y - 1, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3((int)Position.X, (int)Position.Y - 2, (int)Position.Z));
+                        if (Position.X + 1 < 8 && Position.Y - 1 >= 0 && Board.board[(int)Position.X + 1, (int)Position.Y - 1, (int)Position.Z].PieceType != Type.Empty && Board.board[(int)Position.X + 1, (int)Position.Y - 1, (int)Position.Z].IsWhite != IsWhite)
+                            possibleMoves.Add(new Vector3((int)Position.X + 1, (int)Position.Y - 1, (int)Position.Z));
+                        if (Position.X - 1 < 8 && Position.Y - 1 >= 0 && Board.board[(int)Position.X - 1, (int)Position.Y - 1, (int)Position.Z].PieceType != Type.Empty && Board.board[(int)Position.X - 1, (int)Position.Y - 1, (int)Position.Z].IsWhite != IsWhite)
+                            possibleMoves.Add(new Vector3((int)Position.X - 1, (int)Position.Y - 1, (int)Position.Z));
+
+                        if ((int)Position.Y == 0)
+                            this.PieceType = Type.Queen;
                     }
                     #endregion
                     break;
@@ -100,13 +115,13 @@ namespace _3DChess
                     #endregion
                     break;
                 case Type.Queen:
-                #region queen
+                    #region queen
                     possibleMoves.AddRange(new Piece(Type.Bishop, IsWhite, Position).GetPossibleMoves());
                     possibleMoves.AddRange(new Piece(Type.Rook, IsWhite, Position).GetPossibleMoves());
-                #endregion queen
+                    #endregion queen
                     break;
                 case Type.Knight:
-                #region knight
+                    #region knight
                     for (int i = -2; i < 3; i++)
                         for (int j = -2; j < 3; j++)
                             for (int k = -2; k < 3; k++)
@@ -117,7 +132,7 @@ namespace _3DChess
                                     possibleMoves.Add(v);
                                 }
                             }
-                #endregion knight
+                    #endregion knight
                     break;
             }
             return possibleMoves;

@@ -184,16 +184,26 @@ namespace _3DChess
                         {
                             if (whiteToPlay)
                             {
-                                Black.Remove(board[(int)selected.X, (int)selected.Y, (int)selected.Z]);
+                                if (!MoveE.Contains(selected))
+                                {
+                                    Black.Remove(board[(int) selected.X, (int) selected.Y, (int) selected.Z]);
+                                    board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
+                                    board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;
+                                    board[(int)selected.X, (int)selected.Y, (int)selected.Z].Position = selected;
+                                    whiteToPlay = !whiteToPlay;
+                                }
                             }
                             else
                             {
-                                White.Remove(board[(int)selected.X, (int)selected.Y, (int)selected.Z]);
+                                if (!MoveEN.Contains(selected))
+                                {
+                                    White.Remove(board[(int) selected.X, (int) selected.Y, (int) selected.Z]);
+                                    board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
+                                    board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;
+                                    board[(int)selected.X, (int)selected.Y, (int)selected.Z].Position = selected;
+                                    whiteToPlay = !whiteToPlay;
+                                }
                             }
-                            board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
-                            board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;
-                            board[(int)selected.X, (int)selected.Y, (int)selected.Z].Position = selected;
-                            whiteToPlay = !whiteToPlay;
                         }
                     }
                     possibleMove = new Tuple<Piece, List<Vector3>>(new Piece(Type.Empty), new List<Vector3>());

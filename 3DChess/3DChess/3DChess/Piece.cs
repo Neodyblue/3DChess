@@ -49,9 +49,9 @@ namespace _3DChess
                             possibleMoves.Add(new Vector3(Position.X, Position.Y + 1, Position.Z));
                         if (Position.Y == 1 && Board.board[(int)Position.X, (int)Position.Y + 2, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3((int)Position.X, (int)Position.Y + 2, (int)Position.Z));
-                        if (Board.board[(int)Position.X + 1, (int)Position.Y + 1, (int)Position.Z].IsWhite != IsWhite)
+                        if (Position.X + 1 < 8 && Position.Y + 1 < 8 && Board.board[(int)Position.X + 1, (int)Position.Y + 1, (int)Position.Z].IsWhite != IsWhite)
                             possibleMoves.Add(new Vector3((int)Position.X + 1, (int)Position.Y + 1, (int)Position.Z));
-                        if (Board.board[(int)Position.X - 1, (int)Position.Y + 1, (int)Position.Z].IsWhite != IsWhite)
+                        if (Position.X - 1 < 8 && Position.Y + 1 < 8 && Board.board[(int)Position.X - 1, (int)Position.Y + 1, (int)Position.Z].IsWhite != IsWhite)
                             possibleMoves.Add(new Vector3((int)Position.X - 1, (int)Position.Y + 1, (int)Position.Z));
                     }
 
@@ -63,9 +63,9 @@ namespace _3DChess
                             possibleMoves.Add(new Vector3(Position.X, Position.Y - 1, Position.Z));
                         if (Position.Y == 6 && Board.board[(int)Position.X, (int)Position.Y - 2, (int)Position.Z].PieceType == Type.Empty)
                             possibleMoves.Add(new Vector3((int)Position.X, (int)Position.Y - 2, (int)Position.Z));
-                        if (Board.board[(int)Position.X + 1, (int)Position.Y - 1, (int)Position.Z].PieceType != Type.Empty && Board.board[(int)Position.X + 1, (int)Position.Y - 1, (int)Position.Z].IsWhite != IsWhite)
+                        if (Position.X + 1 < 8 && Position.Y - 1 >= 0 && Board.board[(int)Position.X + 1, (int)Position.Y - 1, (int)Position.Z].PieceType != Type.Empty && Board.board[(int)Position.X + 1, (int)Position.Y - 1, (int)Position.Z].IsWhite != IsWhite)
                             possibleMoves.Add(new Vector3((int)Position.X + 1, (int)Position.Y - 1, (int)Position.Z));
-                        if (Board.board[(int)Position.X - 1, (int)Position.Y - 1, (int)Position.Z].PieceType != Type.Empty && Board.board[(int)Position.X - 1, (int)Position.Y - 1, (int)Position.Z].IsWhite != IsWhite)
+                        if (Position.X - 1 < 8 && Position.Y - 1 >= 0 && Board.board[(int)Position.X - 1, (int)Position.Y - 1, (int)Position.Z].PieceType != Type.Empty && Board.board[(int)Position.X - 1, (int)Position.Y - 1, (int)Position.Z].IsWhite != IsWhite)
                             possibleMoves.Add(new Vector3((int)Position.X - 1, (int)Position.Y - 1, (int)Position.Z));
                     }
                     #endregion

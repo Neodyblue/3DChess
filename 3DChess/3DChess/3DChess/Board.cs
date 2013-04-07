@@ -27,6 +27,7 @@ namespace _3DChess
         static Piece selectedCase = new Piece(Type.Empty, true);
         static Tuple<Piece, List<Vector3>> possibleMove = new Tuple<Piece, List<Vector3>>(null, new List<Vector3>());
         static bool whiteToPlay = true;
+        private static bool _whiteChess, _blackChess;
 
         public static void Initialize(Game g)
         {
@@ -99,48 +100,35 @@ namespace _3DChess
             {
                 Piece BlackKing = Black.Find(x => x.PieceType == Type.King);
                 List<Vector3> moves1 =(List<Vector3>)BlackKing.GetPossibleMoves();
-                foreach (Vector3 v in moves1)
+                foreach (Vector3 v in from v in moves1.GetRange(0, moves1.Count) from p in White let move1 = (List<Vector3>)p.GetPossibleMoves() where move1.Contains(v) select v)
                 {
-                   // bool IsEchec = false;
-                    foreach (Piece p in White)
-                    {
-                        List<Vector3> move1 = (List<Vector3>)p.GetPossibleMoves();
-                        if (move1.Contains(v))
-                        {
-                            //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
-                          //  IsEchec = true;
-                            moves1.Remove(v);
-                        }
-                    }
+                    //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
+                    //  IsEchec = true;
+                    _blackChess = true;
+                    moves1.Remove(v);
                 }
                 if (moves1.Count == 0)
                 {
                     //si il y à echec et mat, ça quitte le jeu, faites mieux si vous pouvez ^^
-                    IsRuning = false;
+                    //IsRuning = false;
                 }
             }
             else
             {
                 Piece WhiteKing = White.Find(x => x.PieceType == Type.King);
                 List<Vector3> moves2 = (List<Vector3>)WhiteKing.GetPossibleMoves();
-                foreach (Vector3 v in moves2)
+                foreach (Vector3 v in from v in moves2.GetRange(0, moves2.Count) from move2 in White.Select(p => (List<Vector3>)p.GetPossibleMoves()).Where(move2 => move2.Contains(v)) select v)
                 {
-                   // bool IsEchec2 = false;
-                    foreach (Piece p in White)
-                    {
-                        List<Vector3> move2 = (List<Vector3>)p.GetPossibleMoves();
-                        if (move2.Contains(v))
-                        {
-                            //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
-                          //  IsEchec2 = true;
-                            moves2.Remove(v);
-                        }
-                    }
+                    //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
+                    //  IsEchec2 = true;
+                    _whiteChess = true;
+                    moves2.Remove(v);
                 }
+
                 if (moves2.Count == 0)
                 {
-                    //si il y à echec et mat, ça quitte le jeu, faites mieux si vous pouvez ^^
-                    IsRuning = false;
+                    
+                    //IsRuning = false;
                 }
             }
             
@@ -150,7 +138,7 @@ namespace _3DChess
             if (selected.X >= 0 && selected.X < 8 && selected.Y >= 0 && selected.Y < 8 && selected.Z >= 0 && selected.Z < 3)
             {
                 selectedCase = board[(int)selected.X, (int)selected.Y, (int)selected.Z];
-                if (selectedCase.PieceType != Type.Empty && whiteToPlay == selectedCase.IsWhite)
+                if (selectedCase.PieceType != Type.Empty && whiteToPlay == selectedCase.IsWhite && (whiteToPlay ? (!_whiteChess || selectedCase.PieceType == Type.King) : (!_blackChess || selectedCase.PieceType == Type.King)))
                     possibleMove = new Tuple<Piece, List<Vector3>>(selectedCase, (List<Vector3>)selectedCase.GetPossibleMoves());
                 else
                 {

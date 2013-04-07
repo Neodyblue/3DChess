@@ -51,7 +51,7 @@ namespace _3DChess
                             possibleMoves.Add(new Vector3((int)Position.X, (int)Position.Y + 2, (int)Position.Z));
                         if (Position.X + 1 < 8 && Position.Y + 1 < 8 && Board.board[(int)Position.X + 1, (int)Position.Y + 1, (int)Position.Z].IsWhite != IsWhite)
                             possibleMoves.Add(new Vector3((int)Position.X + 1, (int)Position.Y + 1, (int)Position.Z));
-                        if (Position.X - 1 < 8 && Position.Y + 1 < 8 && Board.board[(int)Position.X - 1, (int)Position.Y + 1, (int)Position.Z].IsWhite != IsWhite)
+                        if (Position.X - 1 < 8 && Position.X - 1 >= 0 && Position.Y + 1 < 8 && Position.Y + 1 >= 0 && Board.board[(int)Position.X - 1, (int)Position.Y + 1, (int)Position.Z].IsWhite != IsWhite)
                             possibleMoves.Add(new Vector3((int)Position.X - 1, (int)Position.Y + 1, (int)Position.Z));
 
                         if ((int)Position.Y == 7)

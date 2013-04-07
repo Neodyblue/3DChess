@@ -43,7 +43,7 @@ namespace _3DChess
             this.IsMouseVisible = true;
             graphics.PreferredBackBufferHeight = 900;
             graphics.PreferredBackBufferWidth = 1680;
-            this.graphics.IsFullScreen = true;
+            this.graphics.IsFullScreen = false;
             this.graphics.ApplyChanges();
 
             screenWidth = this.Window.ClientBounds.Width;

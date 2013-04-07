@@ -98,6 +98,8 @@ namespace _3DChess
         public static void Update()
         {
             MouseState mouseState = Mouse.GetState();
+            _whiteChess = false;
+            _blackChess = false;
             if (!whiteToPlay)
             {
                 Piece BlackKing = Black.Find(x => x.PieceType == Type.King);

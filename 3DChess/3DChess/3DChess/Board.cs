@@ -99,29 +99,53 @@ namespace _3DChess
             if (!whiteToPlay)
             {
                 Piece BlackKing = Black.Find(x => x.PieceType == Type.King);
+                List<Vector3> MoveEN = new List<Vector3>();
+                foreach (Piece p in White)
+                {
+                    MoveEN.AddRange((List<Vector3>)p.GetPossibleMoves());
+                }
+                foreach (Vector3 v in MoveEN)
+                {
+                    if (v == BlackKing.Position)
+                    {
+                        _blackChess = true;
+                    }
+                }
                 List<Vector3> moves1 =(List<Vector3>)BlackKing.GetPossibleMoves();
                 foreach (Vector3 v in from v in moves1.GetRange(0, moves1.Count) from p in White let move1 = (List<Vector3>)p.GetPossibleMoves() where move1.Contains(v) select v)
                 {
                     //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
                     //  IsEchec = true;
-                    _blackChess = true;
+                    //_blackChess = true;
                     moves1.Remove(v);
                 }
                 if (moves1.Count == 0)
                 {
-                    //si il y à echec et mat, ça quitte le jeu, faites mieux si vous pouvez ^^
+                    //si il y à echec et mat, ça quitte le jeu, faites mieux si vous pouvez ^^ 
                     //IsRuning = false;
                 }
             }
             else
             {
                 Piece WhiteKing = White.Find(x => x.PieceType == Type.King);
+                List<Vector3> MoveE = new List<Vector3>();
+                foreach (Piece p in Black)
+                {
+                    MoveE.AddRange((List<Vector3>)p.GetPossibleMoves());
+                }
+                foreach (Vector3 v in MoveE)
+                {
+                    if (v == WhiteKing.Position)
+                    {
+                        _whiteChess = true;
+                    }
+                }
                 List<Vector3> moves2 = (List<Vector3>)WhiteKing.GetPossibleMoves();
                 foreach (Vector3 v in from v in moves2.GetRange(0, moves2.Count) from move2 in White.Select(p => (List<Vector3>)p.GetPossibleMoves()).Where(move2 => move2.Contains(v)) select v)
                 {
                     //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
                     //  IsEchec2 = true;
-                    _whiteChess = true;
+                   // _whiteChess = true;
                     moves2.Remove(v);
                 }
 
@@ -174,7 +198,7 @@ namespace _3DChess
                 selectedCase = new Piece(Type.Empty, true);
         }
 
-        public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public static void Draw(GameTime gameTime, SpriteBatch spriteBatch) 
         {
             spriteBatch.Draw(background, new Rectangle(0, 0, game.Window.ClientBounds.Width, game.Window.ClientBounds.Height), Color.White);
 

@@ -60,7 +60,7 @@ namespace _3DChess
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Menu.LoadContent(Content, screenWidth, screenHeight);
-
+            GameOver.LoadContent(Content, screenWidth, screenHeight);
             Board.LoadContent(Content);
         }
 
@@ -88,7 +88,7 @@ namespace _3DChess
             }
             else
             {
-                this.Exit();
+                GameOver.Update(gameTime);
             }
             
             // TODO: Add your update logic here
@@ -113,6 +113,10 @@ namespace _3DChess
                 if (Board.IsRuning)
                 {
                     Board.Draw(gameTime, spriteBatch);
+                }
+                else
+                {
+                    GameOver.Draw(spriteBatch, screenWidth, screenHeight);
                 }
 
 

@@ -8,7 +8,7 @@ namespace _3DChess
 {
     public class Piece
     {
-        public Type PieceType { get; private set; }
+        public Type PieceType { get; set; }
         public bool IsWhite { get; private set; }
         public Vector3 Position { get; set; }
         public bool IsSelected { get; set; }

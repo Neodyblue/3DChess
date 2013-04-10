@@ -26,11 +26,12 @@ namespace _3DChess
         static Texture2D pieces;
         static Piece selectedCase = new Piece(Type.Empty, true);
         static Tuple<Piece, List<Vector3>> possibleMove = new Tuple<Piece, List<Vector3>>(null, new List<Vector3>());
-        static bool whiteToPlay = true;
+        static bool _iswhiteToPlay = true;
         private static Texture2D _whiteChessImg, _blackChessImg;
         private static bool _whiteChess, _blackChess;
-        static List<Vector3> MoveEN = new List<Vector3>();
-        static List<Vector3> MoveE = new List<Vector3>();
+        static List<Vector3> WhiteDeadCells = new List<Vector3>();
+        static List<Vector3> BlackDeadCells = new List<Vector3>();
+
         public static void Initialize(Game g)
         {
             Black = new List<Piece>();
@@ -101,73 +102,51 @@ namespace _3DChess
             MouseState mouseState = Mouse.GetState();
             _whiteChess = false;
             _blackChess = false;
-            if (!whiteToPlay)
-            {
-                Piece BlackKing = Black.Find(x => x.PieceType == Type.King);
-                MoveEN.Clear();
-                foreach (Piece p in White)
-                {
-                    MoveEN.AddRange((List<Vector3>)p.GetPossibleMoves());
-                }
-                foreach (Vector3 v in MoveEN)
-                {
-                    if (v == BlackKing.Position)
-                    {
-                        _blackChess = true;
-                    }
-                }
-                List<Vector3> moves1 =(List<Vector3>)BlackKing.GetPossibleMoves();
-                foreach (Vector3 v in from v in moves1.GetRange(0, moves1.Count) from p in White let move1 = (List<Vector3>)p.GetPossibleMoves() where move1.Contains(v) select v)
-                {
-                    //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
-                    //  IsEchec = true;
-                    //_blackChess = true;
-                    moves1.Remove(v);
-                }
-                if (moves1.Count == 0)
-                {
-                    //si il y à echec et mat, ça quitte le jeu, faites mieux si vous pouvez ^^ 
-                    //IsRuning = false;
-                }
-            }
-            else
-            {
-                Piece WhiteKing = White.Find(x => x.PieceType == Type.King);
-                MoveE.Clear();
-                foreach (Piece p in Black)
-                {
-                    MoveE.AddRange((List<Vector3>)p.GetPossibleMoves());
-                }
-                foreach (Vector3 v in MoveE)
-                {
-                    if (v == WhiteKing.Position)
-                    {
-                        _whiteChess = true;
-                    }
-                }
-                List<Vector3> moves2 = (List<Vector3>)WhiteKing.GetPossibleMoves();
-                foreach (Vector3 v in from v in moves2.GetRange(0, moves2.Count) from move2 in White.Select(p => (List<Vector3>)p.GetPossibleMoves()).Where(move2 => move2.Contains(v)) select v)
-                {
-                    //peut etre ajouter un texte qui dit que t'es en echec ou je ne sais quoi...
-                    //  IsEchec2 = true;
-                   // _whiteChess = true;
-                    moves2.Remove(v);
-                }
 
-                if (moves2.Count == 0)
-                {
-                    
-                    //IsRuning = false;
-                }
+            if (!_iswhiteToPlay) // noirs jouent
+            {
+                Piece blackKing = Black.Find(x => x.PieceType == Type.King);
+                WhiteDeadCells.Clear();
+
+                board[(int) blackKing.Position.X, (int) blackKing.Position.Y, (int) blackKing.Position.Z].PieceType = Type.Empty;
+                White.ForEach(p => WhiteDeadCells.AddRange(p.GetPossibleMoves())); // on liste les cases menacées par les blancs
+                board[(int) blackKing.Position.X, (int) blackKing.Position.Y, (int) blackKing.Position.Z].PieceType = Type.King;
+
+                WhiteDeadCells = WhiteDeadCells.Distinct().ToList();
+                _blackChess = WhiteDeadCells.Any(v => v == blackKing.Position); // on regarde si notre roi est menacé
+                var blackKingMoves = (List<Vector3>)blackKing.GetPossibleMoves(); // on liste les deplacements possibles de notre roi
+                blackKingMoves.RemoveAll(move => WhiteDeadCells.Contains(move)); // on supprime tous ceux qui le mettraient en echec
+
+                if (blackKingMoves.Count == 0 && _blackChess)
+                    IsRuning = false; //echec & mate
             }
-            
+            else // blancs jouent
+            {
+                Piece whiteKing = White.Find(x => x.PieceType == Type.King);
+                BlackDeadCells.Clear();
+
+                board[(int)whiteKing.Position.X, (int)whiteKing.Position.Y, (int)whiteKing.Position.Z].PieceType = Type.Empty;
+                Black.ForEach(p => BlackDeadCells.AddRange(p.GetPossibleMoves())); // on liste les cases menacées par les noirs
+                board[(int)whiteKing.Position.X, (int)whiteKing.Position.Y, (int)whiteKing.Position.Z].PieceType = Type.King;
+
+                BlackDeadCells = BlackDeadCells.Distinct().ToList();
+                _whiteChess = BlackDeadCells.Any(v => v == whiteKing.Position); // on regarde si notre roi est menacé
+                var whiteKingMoves = (List<Vector3>)whiteKing.GetPossibleMoves(); // on liste les deplacements possibles de notre roi
+                whiteKingMoves.RemoveAll(move => BlackDeadCells.Contains(move)); // on supprime tous ceux qui le mettraient en echec
+
+                if (whiteKingMoves.Count == 0 && _whiteChess)
+                    IsRuning = false; //echec & mate
+            }
+
+            if (!IsRuning) return;
+
             if (mouseState.LeftButton != ButtonState.Pressed) return;
 
             Vector3 selected = ScreenToBoard(mouseState.X, mouseState.Y);
             if (selected.X >= 0 && selected.X < 8 && selected.Y >= 0 && selected.Y < 8 && selected.Z >= 0 && selected.Z < 3)
             {
                 selectedCase = board[(int)selected.X, (int)selected.Y, (int)selected.Z];
-                if (selectedCase.PieceType != Type.Empty && whiteToPlay == selectedCase.IsWhite /*&& (whiteToPlay ? (!_whiteChess || selectedCase.PieceType == Type.King) : (!_blackChess || selectedCase.PieceType == Type.King))*/)
+                if (selectedCase.PieceType != Type.Empty && _iswhiteToPlay == selectedCase.IsWhite /*&& (whiteToPlay ? (!_whiteChess || selectedCase.PieceType == Type.King) : (!_blackChess || selectedCase.PieceType == Type.King))*/)
                     possibleMove = new Tuple<Piece, List<Vector3>>(selectedCase, (List<Vector3>)selectedCase.GetPossibleMoves());
                 else
                 {
@@ -182,26 +161,26 @@ namespace _3DChess
                         }
                         else
                         {
-                            if (whiteToPlay)
+                            if (_iswhiteToPlay)
                             {
-                                if (!MoveE.Contains(selected))
+                                if (!BlackDeadCells.Contains(selected))
                                 {
                                     Black.Remove(board[(int) selected.X, (int) selected.Y, (int) selected.Z]);
                                     board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
                                     board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;
                                     board[(int)selected.X, (int)selected.Y, (int)selected.Z].Position = selected;
-                                    whiteToPlay = !whiteToPlay;
+                                    _iswhiteToPlay = !_iswhiteToPlay;
                                 }
                             }
                             else
                             {
-                                if (!MoveEN.Contains(selected))
+                                if (!WhiteDeadCells.Contains(selected))
                                 {
                                     White.Remove(board[(int) selected.X, (int) selected.Y, (int) selected.Z]);
                                     board[(int)possibleMove.Item1.Position.X, (int)possibleMove.Item1.Position.Y, (int)possibleMove.Item1.Position.Z] = new Piece(Type.Empty, true);
                                     board[(int)selected.X, (int)selected.Y, (int)selected.Z] = possibleMove.Item1;
                                     board[(int)selected.X, (int)selected.Y, (int)selected.Z].Position = selected;
-                                    whiteToPlay = !whiteToPlay;
+                                    _iswhiteToPlay = !_iswhiteToPlay;
                                 }
                             }
                         }
@@ -252,12 +231,12 @@ namespace _3DChess
                 {
                     if (possibleMove.Item1.IsWhite)
                     {
-                        if (MoveE.Contains(v))
+                        if (BlackDeadCells.Contains(v))
                             continue;
                     }
                     else
                     {
-                        if (MoveEN.Contains(v))
+                        if (WhiteDeadCells.Contains(v))
                             continue;
                     }
                 }
